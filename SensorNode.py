@@ -1,8 +1,8 @@
 
 
 ## @package SensorNode
-# This package simulates the working of LoRaWAN Sensor Node transmitting 6 bytes at DR 5 data rate.
-# Emprical values of energy consumption, lekage current are used. In addition, the operation of the
+# This package simulates the working of the LoRaWAN Sensor Node transmitting 6 bytes at DR 5 data rate.
+# Emprical values of energy consumption, leakage current are used. In addition, the operation of the
 # Power Management Unit (PMU) is approximated using a model derived from the empirical measurements.
 # Refer ./COPYING.txt for terms and conditions.
 #
@@ -24,22 +24,22 @@ class SensorNode:
 
     def __init__(self):
         ## @var  baseEnergy
-        # Base energy required in the capacitor, ie., the energy stored when charged upto VL
+        # Base energy required in the capacitor, ie., the energy stored when charged up to VL
         self.baseEnergy = 27.54
         ## @var accEnergy
         # Total accumulated energy in the capacitor
         self.accEnergy = 0.0
         ## @var 
-        # Total generated energy overtime
+        # Total generated energy over time
         self.totalGeneratedEnergy = 0
         ## @var accEnergyPerSample
         # Energy accumulated between two data samples
         self.accEnergyPerSample = 0.0
         ## @var nodeConsumption
-        # Energy consumption of the node, ecmperically estimated
+        # Energy consumption of the node, empirically estimated
         self.nodeConsumption = 66.29
         ## @var lastSamplingTime
-        # Sampling point of the last data point, required to calculate the energy generaated between samples
+        # Sampling point of the last data point, required to calculate the energy generated between samples
         self.lastSamplingTime = datetime.strptime('2016-04-06 21:26:27', '%Y-%m-%d %H:%M:%S')
         ## @var txPackets
         # Total number of packets transmitted
@@ -81,11 +81,11 @@ class SensorNode:
         self.accEnergyPerSample += energy
 
  
-    ## Update energy lost through leakge of supercap
+    ## Update energy lost through leakage of supercap
     # @warning Updates happen only after each sample in the datafile is read,
-    # not instantaneosuly
+    # not instantaneously
     #
-    # @param timeDelta Time detla between two  samples, used ti calculate energy
+    # @param time delta Time delta between two  samples, used to calculate energy
     def updateLeakageEnergy(self, timeDelta):
         # deduct, leakage energy in mJ but make sure it is not less than 0 mJ
         eLeakage = ((self.Ileakage*timeDelta)**2)/(2*self.Cstore)
@@ -111,11 +111,11 @@ class SensorNode:
             self.txPackets += 1
             self.accEnergy -= self.nodeConsumption
 
-    ## Process the data samples and simulates the execution of the node
+    ## Process the data samples and simulate the execution of the node
     # @param tableData The data samples for which the node performance has to be simulated.
-    #       row [0]- sampling time in the specified formt
+    #       row [0]- sampling time in the specified format
     #       tableData [1]- temperature difference across the TEG
-    # @return total number of packtes transmitted for the given sample run
+    # @return total number of packets transmitted for the given sample run
     def processData(self, tableData):
         for row in tableData:
             try:
