@@ -1,8 +1,8 @@
 
 ## @package SoTEGModel
 #  This package implements the model of a custom Soil-Air Thermolectric Generator (SoTEG) described in https://doi.org/10.1109/ACCESS.2024.3414652.
-#  The SoTEG converts the temperature difference between soil and air into energy which can be used to power ooutdoor batteryless devices. The model
-#  uses a one dimensional heat conduction approximation of the harvester which consideres heat trasnfer through radiation, convection and conduction.
+#  SoTEG converts the temperature difference between soil and air into energy which can be used to power outdoor batteryless devices. The model
+#  uses a one-dimensional heat conduction approximation of the harvester which considers heat transfer through radiation, convection and conduction.
 #  Refer ./COPYING.txt for terms and conditions
 #  
 
@@ -15,7 +15,7 @@ import math
 
 
 class SoTEGModel:
-       ## The intialization constructor.
+       ## The initialization constructor.
        # All non-time varying variables are initialized here.
        # Units of measurements, unless otherwise specified:
        # Temperature - °C
@@ -51,8 +51,8 @@ class SoTEGModel:
               # Thermal resistance of the TEG, can be obtained from the datasheet
               self.R_teg = 1.56
               ## @var
-              # Thermal resistance of the copper rodds in parallel (10 cm in length and 6.35 mm in diameter)
-              # Can be calcualated as R  = length/(conductivity*area)
+              # Thermal resistance of the copper rods in parallel (10 cm in length and 6.35 mm in diameter)
+              # Can be calculated as R  = length/(conductivity*area)
               self.R_rod = 0.87
               ## @var
               # Thermal resistance of the adhesive used, you may assume this zero for ideal calculations.
@@ -61,14 +61,14 @@ class SoTEGModel:
               # Thermal resistance of the copper plate used between the copper rods and the TEG
               self.R_plate = 0.0008
               ## @var
-              # Thermal resistance of the radiator (10 cm diamter and 0.5 mm thickness)
+              # Thermal resistance of the radiator (10 cm diameter and 0.5 mm thickness)
               self.R_radiator = 0.0001445
               ## @var
-              # Area of the radiator (use equation for area of a disk)
+              # Area of the radiator (use the equation for the area of a disk)
               self.A_radiator = 0.00865
 
               ## @var
-              # Total thermal reistance of the entire system. All the thermal resistances are in parallel
+              # Total thermal resistance of the entire system. All the thermal resistances are in parallel
               self.R_total = self.R_rod + self.R_plate + self.R_teg + self.R_radiator + self.R_adhesive
 
               # uses the radiation model of the STEG to calculate the
@@ -88,66 +88,66 @@ class SoTEGModel:
               t_sky = t_sky + 273.15
 
               ## @var s_lambda decides the amount of solar radiation falling on the radiator.
-              # Value of s_lambda is calcualted using the angle of incidence.
+              # Value of s_lambda is calculated using the angle of incidence.
               # 1- implies the radiator is facing the sun and the entire irradiance falls on it.
               # 0- no radiation falls on the radiator.
               s_lambda = 1.0
 
               # Estimate convection coefficient from wind speed.
-              # Refer the publication for more details
+              # Refer to the publication for more details
               self.h_air = 6.5 + 2.8 * wind_speed
 
               ## Calculate the irradiance factor s_lambda.
-              # The value is calcualated only for a valid value of solar radiation, else 1 is used
+              # The value is calculated only for a valid value of solar radiation, else 1 is used
               if I_solar > 0.0:
                      s_lambda = math.cos(math.radians(theta))
 
               ## @var m first variable of the quartic equation
               m = ((1 / (self.sigma * self.emissivity)) * (self.h_air + (1 / (self.A_radiator * self.R_total))))
 
-              ##@var c second variable of the quartic eqaution
+              ##@var c second variable of the quartic equation
               c = (t_sky ** 4 + \
                    ((self.h_air * t_air) / (self.sigma * self.emissivity)) + \
                    ((self.absorptivity * s_lambda * I_solar) / (self.sigma * self.emissivity)) + \
                    (t_soil / (self.sigma * self.emissivity * self.A_radiator * self.R_total)))
 
-              ## calcualtes the temperature of the radaitor.
-              # This equations is obtianed by solving the quartic equation using MATLAB and choosing only
+              ## Calculate the temperature of the radiator.
+              # This equation is obtained by solving the quartic equation using MATLAB and choosing only
               # valid root
               temp_radiator = (3**(1/2)*(4*3**(1/2)*c*(3*((3**(1/2)*(256*c**3 + 27*m**4)**(1/2))/18 + m**2/2)**(2/3) - 4*c)**(1/2) - 3*3**(1/2)*(3*((3**(1/2)*(256*c**3 + 27*m**4)**(1/2))/18 + m**2/2)**(2/3) - 4*c)**(1/2)*((3**(1/2)*(256*c**3 + 27*m**4)**(1/2))/18 + m**2/2)**(2/3) + 3**(1/2)*6**(1/2)*m*(3**(1/2)*(256*c**3 + 27*m**4)**(1/2) + 9*m**2)**(1/2))**(1/2))/(6*(9*((3**(1/2)*(256*c**3 + 27*m**4)**(1/2))/18 + m**2/2)**(2/3) - 12*c)**(1/4)*((3**(1/2)*(256*c**3 + 27*m**4)**(1/2))/18 + m**2/2)**(1/6)) - (3**(1/2)*(3*((3**(1/2)*(256*c**3 + 27*m**4)**(1/2))/18 + m**2/2)**(2/3) - 4*c)**(1/2))/(6*((3**(1/2)*(256*c**3 + 27*m**4)**(1/2))/18 + m**2/2)**(1/6))
               
               ## Sanit check. 
-              # This should never happen. However, by chance this condition is hit, simulation is 
+              # This should never happen. However, by chance this condition is hit, the simulation is 
               # terminated
               if isinstance(temp_radiator, complex):
                      sys.exit()
 
-              ## convert temperarture back to back to Celsius
+              ## Convert temperature back to back to Celsius
               return (temp_radiator - 273.15)
 
-       ## Calcualates the temperature of a generator with heatsink used at the ambient side
+       ## Calculates the temperature of a generator with a heatsink used at the ambient side
        # @warning This is not a verified method!
        # @param t_air Temperature of the air
        # @param t_soil Temperature of the soil
        # @param h Natural convection coefficient
        # @param hs_area Area of the heatsink
-       # @return Calculated temperature differnce 
+       # @return Calculated temperature difference 
        def getHeatSinkTemperature(self, t_air, t_soil, h, hs_area):
               t_hs = (t_air*h+t_soil/(self.R_total))/((1/self.R_total)+h)
               return t_hs
 
-       ## Calcualtes temperature difference across teg
+       ## Calculates temperature difference across teg
        # @param t_radiator Temperature of the radiator
        # @param t_soil Temperature of the soil
-       # @return Calcualated temperature difference
+       # @return Calculated temperature difference
        def getDeltaT(self, t_radiator, t_soil):
               dT = (t_radiator-t_soil)*self.R_teg/(self.R_total)
               return (dT)
 
-       ## Estiamtes the mateched load power of the TEG
+       ## Estimates the matched load power of the TEG
        # @param dt temperature difference across the TEG
        # @return Estimated power in mW
-       def getTEGMatechedLoadPower(self, dt):
+       def getTEGMatchedLoadPower(self, dt):
               power = self.sCoefficient*self.sCoefficient*(dt*dt)/(4*self.tegElectricalR*1000)
               return round(power,3)
 
@@ -164,7 +164,7 @@ if __name__ == '__main__':
        
        t_rad = soteg.getRadiatorTemperature(self, t_air, t_soil, I_solar, wind_speed, theta, t_sky):
        t_delta = soteg. (t_rad, t_soil)
-       power = soteg.getTEGMatechedLoadPower(t_delta)
+       power = soteg.getTEGMatchedLoadPower(t_delta)
        # print: radiator temperature, delta temperature across the TEG and the generated power
        print(t_rad, t_delta, power)
 '''
