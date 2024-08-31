@@ -316,7 +316,7 @@ class SoTEGModel:
               power = self.sCoefficient*self.sCoefficient*(dt*dt)/(4*self.tegElectricalR*1000)
               return round(power,3)
 
-
+'''
 # Example Run
 if __name__ == '__main__':
        soteg = SoTEGModel()
