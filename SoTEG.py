@@ -87,8 +87,8 @@ class SoTEGModel:
         t_sky = t_sky + 273.15
 
         ## @var s_lambda decides the amount of solar radiation falling on the radiator.
-        # Value of s_lambda is calculated using the angle of incidence.
-        # 1- implies the radiator is facing the sun and the entire irradiance falls on it.
+        # The value of s_lambda is calculated using the incidence angle.
+        # 1- implies the radiator faces the sun and the entire irradiance falls on it.
         # 0- no radiation falls on the radiator.
         s_lambda = 1.0
 
@@ -128,7 +128,7 @@ class SoTEGModel:
                         2 / 3) - 4 * c) ** (1 / 2)) / (6 * (
                     (3 ** (1 / 2) * (256 * c ** 3 + 27 * m ** 4) ** (1 / 2)) / 18 + m ** 2 / 2) ** (1 / 6))
 
-        ## Sanit check.
+        ## Sanity check.
         # This should never happen. However, by chance this condition is hit, the simulation is
         # terminated
         if isinstance(temp_radiator, complex):
@@ -169,9 +169,9 @@ if __name__ == '__main__':
     soteg = SoTEGModel()
     t_soil = 20
     t_air = 25
-    I_solar =  300
-    wind_speed = 3
-    theta = 30
+    I_solar =  200
+    wind_speed = 2
+    theta = 0
     t_sky = 0
 
     t_rad = soteg.getRadiatorTemperature(t_air, t_soil, I_solar, wind_speed, theta, t_sky)
