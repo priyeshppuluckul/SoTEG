@@ -14,7 +14,7 @@
 The temperature difference across the TEG, <br>
 
 $$
-\begin{equation}{\Delta T = (T_{rad} - T_{soil})\frac {R_{TEG}}{R_{SoTEG}}} \end{equation}
+\begin{equation}{\Delta TEG = (T_{rad} - T_{soil})\frac {R_{TEG}}{R_{SoTEG}}} \end{equation}
 $$ <br>
 
 where  $R_{TEG}$ is the thermal resistance of the TEG and $R_{SoTEG}$ is the total thermal resistance of the SoTEG, given as, <br>
