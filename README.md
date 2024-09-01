@@ -19,7 +19,7 @@ $$ <br>
 
 where  $R_{TEG}$ is the thermal resistance of the TEG and $R_{SoTEG}$ is the total thermal resistance of the SoTEG, given as, <br>
 
-$${R_{SoTEG} = R_{RAD} + 2 R_{ADH} + R_{TEG} + R_{CPLT} + \frac {R_{CROD}}{5}}$$ <br>
+$${R_{SoTEG} = R_{RAD} + 2 R_{ADH} + R_{TEG} + R_{CPLT} + \frac {R_{CROD}}{10}}$$ <br>
 
 The radiator temperature $T_{rad}$ can be calculated as, <br>
 
