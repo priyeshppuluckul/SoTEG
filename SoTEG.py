@@ -67,7 +67,7 @@ class SoTEGModel:
         self.A_radiator = 0.00865
 
         ## @var
-        # Total thermal resistance of the entire system. All the thermal resistances are in parallel
+        # Total thermal resistance of the entire system. All the thermal resistances are in series
         self.R_total = self.R_rod + self.R_plate + self.R_teg + self.R_radiator + self.R_adhesive
 
         # uses the radiation model of the STEG to calculate the
